@@ -178,6 +178,7 @@ body {
     font-size: 14px;
     color: gray;
     width: 115px;
+    text-align: center;
 }
 
 .todo-list li:last-child {

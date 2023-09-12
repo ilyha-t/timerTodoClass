@@ -10,14 +10,12 @@ export default class App extends Component {
     super();
     this.state = {
       todos: [],
-      filter: 'All',
-      filterTodos: [],
+      filter: 'All'
     };
   }
 
   addTodo = (todo) => {
-    new Promise((resolve) => {
-      this.setState(() => {
+    this.setState(() => {
         return {
           todos: [
             ...this.state.todos,
@@ -32,12 +30,9 @@ export default class App extends Component {
           ],
         };
       });
-      resolve();
-    }).then(() => this.filterTodo(this.state.filter));
   };
 
   doneTodo = (todo) => {
-    new Promise((resolve) => {
       const findIndex = this.state.todos.findIndex((f) => f.id === todo.id);
       this.setState(() => {
         return {
@@ -48,63 +43,43 @@ export default class App extends Component {
           ],
         };
       });
-      resolve();
-    }).then(() => this.filterTodo(this.state.filter));
   };
 
   deleteTodo = (id) => {
-    new Promise((resolve) => {
       const findIndex = this.state.todos.findIndex((f) => f.id === id);
       this.setState(() => {
         return {
           todos: [...this.state.todos.slice(0, findIndex), ...this.state.todos.slice(findIndex + 1)],
         };
       });
-      resolve();
-    }).then(() => {
-      this.filterTodo(this.state.filter);
-    });
   };
 
   filterTodo = (filterName) => {
     switch (filterName) {
       case 'Active':
-        console.log(this.state)
-        this.setState({
-          filterTodos: this.state.todos.filter((todo) => !todo.done),
-        });
-        break;
+        return this.state.todos.filter((todo) => !todo.done);
       case 'Completed':
-        this.setState({
-          filterTodos: this.state.todos.filter((todo) => todo.done),
-        });
-        break;
+        return this.state.todos.filter((todo) => todo.done);
       default:
-        this.setState({ filterTodos: [...this.state.todos] });
-        break;
+        return this.state.todos;
     }
   };
 
   changeFilterTodo = (element) => {
-    new Promise((resolve) => {
-      this.setState({ filter: element.target.textContent });
-      resolve();
-    }).then(() => this.filterTodo(this.state.filter));
+      const newFilter = element.target.textContent;
+      this.setState({ filter: newFilter });
+      this.filterTodo(newFilter);
   };
 
   clearCompleted = () => {
-    new Promise((resolve) => {
       this.setState(() => {
         return {
           todos: this.state.todos.filter((todo) => !todo.done),
         };
       });
-      resolve();
-    }).then(() => this.filterTodo(this.state.filter));
   };
 
   editTodo = (todo, value) => {
-    new Promise((resolve) => {
       const findIndex = this.state.todos.findIndex((f) => f.id === todo.id);
       this.setState(() => {
         return {
@@ -115,13 +90,9 @@ export default class App extends Component {
           ],
         };
       });
-      resolve();
-    }).then(() => this.filterTodo(this.state.filter));
   };
 
   resetTodo = (todo, timer=0) => {
-    new Promise((resolve) => {
-      console.log(todo)
       const findIndex = this.state.todos.findIndex((f) => f.id === todo.id);
       this.setState(() => {
         return {
@@ -132,8 +103,6 @@ export default class App extends Component {
           ],
         };
       });
-      resolve();
-    }).then(() => this.filterTodo(this.state.filter));
   }
 
   render() {
@@ -141,7 +110,7 @@ export default class App extends Component {
       <section className="todoapp">
         <NewTaskForm addTodo={this.addTodo} config={config} />
         <TodoList
-          todos={this.state.filterTodos}
+          todos={this.filterTodo(this.state.filter)}
           doneTodo={this.doneTodo}
           deleteTodo={this.deleteTodo}
           editTodo={this.editTodo}

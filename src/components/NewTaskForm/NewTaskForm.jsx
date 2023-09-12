@@ -43,7 +43,7 @@ export default class NewTaskForm extends Component {
 
   onSubmitForm = (e) => {
     if (this.state.label.trim().length > 0) {
-      this.props.addTodo({...this.state, timer: { value: this.state.minutes * 60 + this.state.seconds, timerId: null, isPlay: false }});
+      this.props.addTodo({...this.state, timer: { value: this.state.minutes * 60 + this.state.seconds, timerId: null, isPlay: true }});
       this.setState({ label:'', minutes: 0, seconds: 0 });
     }
   };
